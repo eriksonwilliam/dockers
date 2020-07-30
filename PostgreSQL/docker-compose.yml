@@ -1,0 +1,13 @@
+
+version: '3'
+
+services:
+  postgressrv:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "Postgres!"
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/erikson/Docker/Volumes/PostgreSQL:/var/lib/postgresql/data 

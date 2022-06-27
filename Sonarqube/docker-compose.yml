@@ -1,0 +1,43 @@
+version: '3.1'
+services:
+  sonarqube:
+    image: sonarqube
+    container_name: sonarqube
+    hostname: sonarqube
+    restart: always
+    depends_on:
+      - postgresql
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://postgresql:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+      sonar.search.javaAdditionalOpts: "-Dnode.store.allow_mmap=false"
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+  postgresql:
+    image: postgres
+    container_name: postgresql
+    hostname: postgresql
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonar
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  postgresql:
+  postgresql_data:
